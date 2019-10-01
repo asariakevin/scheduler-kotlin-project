@@ -84,7 +84,16 @@ class Views {
     }
 
     fun showMonths(){
+        var calendarUtils = CalendarUtils()
+
         println("Months of the year")
+        println(calendarUtils.months)
+
+        //add checking input option
+        println("select a month (1,2,..): ")
+        var monthSelected = readLine()!!.toInt()
+        calendarUtils.chooseMonthToPrint(monthSelected)
+
 
     }
 }
