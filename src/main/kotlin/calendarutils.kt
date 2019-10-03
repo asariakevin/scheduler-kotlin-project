@@ -48,10 +48,11 @@ class CalendarUtils {
         println("S  M  T  W  T  F  S")
 
         var initialSpace = ""
-        var dayRange = 0..(dayOfWeek - 1)
+        var dayRange = 0..(dayOfWeek - 2) //don't change
+
 
         for ( i in dayRange){
-            initialSpace += "  "
+            initialSpace += "  _"
         }
 
         print(initialSpace)
@@ -79,6 +80,8 @@ class CalendarUtils {
 
 
     }
+
+    fun whatMonthIsToday() = Calendar.DAY_OF_MONTH
 }
 
 

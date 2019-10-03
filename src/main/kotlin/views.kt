@@ -1,4 +1,20 @@
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.joda.time.DateTime
+import org.joda.time.LocalDate
+import org.joda.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+
 class Views {
+
+    private  var entryModel : EntryModel? = null
+    private var calendarUtils: CalendarUtils? = null
+
+    init {
+
+        entryModel = EntryModel()
+        calendarUtils = CalendarUtils()
+    }
 
    private var selectedOption: Int = 0
 
@@ -57,42 +73,64 @@ class Views {
 
     fun makeEntry(){
 
-        var monthsCalendar : String
 
-       //will need something to process this
+        //TODO: add a time option
         var stringPrompt = """
             Make an entry:
             Format is DD/MM<space>entry
         """.trimIndent()
 
-        // should be green in color
+
+
+        //TODO: change the color of this text to green
         println("Make a Schedule Entry")
-        //printCalendar
         println(stringPrompt)
-        readLine()
-        //calling a method to take this and put in db
+        var entryFromTerminal = readLine()
+
+        //TODO: create a check on the input
+        //checks if entry is empty
+        //not in format
+        var dateAndEntryArray = entryFromTerminal!!.split(" ",limit = 2)
+        var dateAndMonth = dateAndEntryArray[0]
+        var ( date , month) = dateAndMonth.split("/")
+        var entry = dateAndEntryArray[1]
+
+        transaction {
+
+            entryModel!!.makeAnEntry( date.toInt(),month.toInt(),entry)
+
+        }
+
 
 
     }
 
     fun showTodaysSchedule(){
 
+
+        val currentDate  = LocalDate.now()
+
+        var ( year , month , date) = currentDate.toString().split("-")
+
+        //TODO:print todays date
+        entryModel!!.makeQuery(date,month,year)
     }
 
     fun showWeeksSchedule(){
 
+        //TODO: show each day's schedule , day should be a subtitle followed by tabbed schedules
     }
 
     fun showMonths(){
-        var calendarUtils = CalendarUtils()
+       // var calendarUtils = CalendarUtils()
 
         println("Months of the year")
-        println(calendarUtils.months)
+        println(calendarUtils!!.months)
 
         //add checking input option
         println("select a month (1,2,..): ")
         var monthSelected = readLine()!!.toInt()
-        calendarUtils.chooseMonthToPrint(monthSelected)
+        calendarUtils!!.chooseMonthToPrint(monthSelected)
 
 
     }

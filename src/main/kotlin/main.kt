@@ -1,10 +1,12 @@
+import EntryModel.Entries.entry
+
 fun main(){
 
-//    val view = Views()
-//    view.showWholePrompt()
+    val view = Views()
+    view.showWholePrompt()
 
 
-    val entry = EntryModel()
-    entry.makeAnEntry(1,2,"kotlin everywhere meetup")
-    entry.printEntry()
+//    val entry = EntryModel()
+//    entry.makeAnEntry(1,2,"kotlin everywhere meetup")
+  //  entry.printEntry()
 }

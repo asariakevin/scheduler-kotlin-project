@@ -3,17 +3,14 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.IntIdTable
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 //import org.jetbrains.exposed.sql.transactions.TransactionManager.Companion.manager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 //import sun.rmi.transport.Connection
 import java.util.*
-
+import kotlin.collections.ArrayList
 
 
 class EntryModel {
@@ -89,10 +86,36 @@ class EntryModel {
             //Database.connect("jdbc:sqlite:test.db", driver = "org.sqlite.JDBC")
             //addLogger(StdOutSqlLogger)
            // SchemaUtils. (Entries)
-            println("${Entry.get(1).entry}")
+
+           Entry.all().forEach { println( "${it.entry}") }
+            //println("${Entry.get(1).entry}")
 
         }
 
+    }
+
+    fun makeQuery( date: String , month:  String, year : String ){
+
+        transaction {
+            Entry.find{
+                Entries.schedule_date.eq(date.toInt()) and Entries.schedule_month.eq(month.toInt()) and Entries.schedule_year.eq(year.toInt())
+            }.forEach { println("${it.entry}") }
+        }
+    }
+
+    //this function should return an array of days in a month that have a schedule
+
+    fun arrayOfSchedulesInMonth( month: Int, year: Int) : ArrayList<Int>{
+
+        var arrayOfDaysOfSchedules : ArrayList<Int> = ArrayList()
+
+        transaction {
+            Entry.find{
+                Entries.schedule_month.eq(month) and Entries.schedule_year.eq(year)
+            }.forEach { arrayOfDaysOfSchedules.add(it.schedule_date) }
+        }
+
+        return arrayOfDaysOfSchedules
     }
 }
 
